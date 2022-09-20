@@ -16,3 +16,19 @@ def train_linear_reg(X,y):
     XTX = X.T.dot(X)
     XTX_inv = np.linalg.inv(XTX)
     return XTX_inv.dot(X.T).dot(y)
+
+def train_linear_reg_regularized(X,y,r = 0.001):
+    ones = np.ones(X.shape[0])
+    X = np.column_stack([ones,X])
+    XTX = X.T.dot(X)
+    XTX = XTX + r*np.eye(XTX.shape[0])
+    XTX_inv = np.linalg.inv(XTX)
+    return XTX_inv.dot(X.T).dot(y)
+
+def rmse(y,y_pred):
+
+   error_ = y - y_pred
+
+   se = error_ ** 2
+   mse = se.mean()
+   return np.sqrt(mse)
