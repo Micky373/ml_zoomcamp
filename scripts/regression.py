@@ -1,4 +1,5 @@
 import numpy as np
+import seaborn as sns
 
 def linear_reg(xi,w0,w):
     pred = w0
@@ -32,3 +33,22 @@ def rmse(y,y_pred):
    se = error_ ** 2
    mse = se.mean()
    return np.sqrt(mse)
+
+def plot_pred(y,y_pred):
+    sns.histplot(y_pred,bins=50, alpha = 0.5, color = 'red')
+    sns.histplot(y,bins=50, alpha = 0.5, color = 'blue')
+
+def prepare_X(df,base,categories):
+    df = df.copy()
+    features = base.copy()
+    df['age'] = 2017 - df.year
+    features.append('age')
+    for value in [2,3,4]:
+        df['num_of_doors_%s' %value] = (df.number_of_doors == value).astype('int')
+        features.append('num_of_doors_%s' %value)
+    for category,values in categories.items():
+
+        for value in values:
+            df['%s_%s' %(category,value)] = (df[category]== value).astype('int')
+            features.append('%s_%s' %(category,value))
+    return df[features].fillna(0).values
