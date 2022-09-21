@@ -52,3 +52,13 @@ def prepare_X(df,base,categories):
             df['%s_%s' %(category,value)] = (df[category]== value).astype('int')
             features.append('%s_%s' %(category,value))
     return df[features].fillna(0).values
+
+
+def show_training_results_with_regularization(X_train,X_val,y_train,y_val,r_list):
+    for r in r_list:
+        w_all= train_linear_reg_regularized(X_train,y_train,r)
+        w0 = w_all[0]
+        w = w_all[1:]
+        y_val_pred = w0 + X_val.dot(w)
+        score = rmse(y_val,y_val_pred)
+        print(r, w0, round(score,2))
