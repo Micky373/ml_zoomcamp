@@ -1,7 +1,11 @@
 import numpy as np
+from IPython.display import display
+from sklearn.metrics import mutual_info_score
 
-def col_name_refining(df,list_):
-    for col in list_:
+def data_frame_refining(df):
+    df.columns = df.columns.str.lower().str.replace(' ', '_')
+    cat_columns = df.dtypes[df.dtypes == 'object'].index
+    for col in cat_columns:
         df[col] = df[col].str.lower().str.replace(' ', '_')
 
     return df
@@ -39,3 +43,24 @@ def train_val_test_split_with_shuffle(df,seed,val_split,test_split,del_col):
     del df_val[del_col]
 
     return df_train,df_val,df_test,y_train,y_test,y_val
+
+def display_risk_factor(df,cat_columns,datum_value):
+    for col in cat_columns:
+        print(col)
+        df_group = df.groupby(col).churn.agg(['mean','count'])
+        df_group['diff'] = df_group['mean'] - datum_value
+        df_group['risk'] = df_group['mean'] / datum_value
+        display(df_group)
+        print('*******')
+        print('*******')
+
+def calculate_mut_score(df,cat_columns,bool_):
+    dict_ = {}
+    for col in cat_columns:
+        dict_[col] = round((mutual_info_score(df[col],df.churn)),5)
+
+    return sorted(dict_.items(), key= lambda x: x[1],reverse=bool_)
+
+
+
+
