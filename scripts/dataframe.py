@@ -1,6 +1,8 @@
 import numpy as np
 from IPython.display import display
 from sklearn.metrics import mutual_info_score
+import matplotlib.pyplot as plt
+import seaborn as sns 
 
 def data_frame_refining(df):
     df.columns = df.columns.str.lower().str.replace(' ', '_')
@@ -61,6 +63,14 @@ def calculate_mut_score(df,cat_columns,bool_):
 
     return sorted(dict_.items(), key= lambda x: x[1],reverse=bool_)
 
+def corr_matrix(df,title:str,save_as):
+    plt.figure(figsize=(25, 20))
+    res=sns.heatmap(df.corr(), annot=True,fmt='.2f');
+    res.set_xticklabels(res.get_xmajorticklabels(), fontsize = 15)
+    res.set_yticklabels(res.get_ymajorticklabels(), fontsize = 15)
+    plt.title(title,size=18, fontweight='bold')
+    plt.savefig(f'../charts/{save_as}')
+    plt.show
 
 
 
