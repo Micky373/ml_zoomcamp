@@ -126,7 +126,7 @@ def train(df,y_train,categorical_cols,numerical_cols,C=1.0):
     dv = DictVectorizer(sparse=False)
     X_train = dv.fit_transform(dicts)
 
-    model = LogisticRegression(C=C,max_iter=1000)
+    model = LogisticRegression(C=C)
     model.fit(X_train,y_train)
 
 
