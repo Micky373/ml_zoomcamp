@@ -1,38 +1,32 @@
-f_in = 'model_C=(1.0).bin'
-
-# Predicting
-
+from flask import Flask, request, jsonify
 import pickle
 
+f_in = 'model_C=(1.0).bin'
 
 with open(f_in,'rb') as f_in:
     (dv,model) = pickle.load(f_in)
 
-customer = {
-    'gender': 'female',
-    'seniorcitizen': 0,
-    'partner': 'yes',
-    'dependents': 'no',
-    'phoneservice': 'no',
-    'multiplelines': 'no_phone_service',
-    'internetservice': 'dsl',
-    'onlinesecurity': 'no',
-    'onlinebackup': 'yes',
-    'deviceprotection': 'no',
-    'techsupport': 'no',
-    'streamingtv': 'no',
-    'streamingmovies': 'no',
-    'contract': 'month-to-month',
-    'paperlessbilling': 'yes',
-    'paymentmethod': 'electronic_check',
-    'tenure': 1,
-    'monthlycharges': 29.85,
-    'totalcharges': 29.85,
-}
+app = Flask('churn')
 
-X = dv.transform([customer])
+@app.route('/predict',methods=['POST'])
+def predict():
 
-y_pred = model.predict_proba(X)[0,1]
+    customer = request.get_json()
 
-print('Input',customer)
-print('Churn Probability',y_pred)
+    X = dv.transform([customer])
+
+    y_pred = model.predict_proba(X)[0,1]
+
+    churn = y_pred >= 0.5
+
+    result = {
+        'churn_probability': float(y_pred),
+        'churn': bool(churn)
+    } 
+
+    return jsonify(result)
+
+# This line enables the app.run to be excuted when the predict.py file is called
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0',port=9696)

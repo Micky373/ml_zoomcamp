@@ -1,0 +1,5 @@
+docker build -t zoomcamp-test-micky . ------- is used to build the docker image from the current directory
+                                                given the correct Dockerfile at that directory
+
+docker run -it --rm -p 8080:8080 zoomcamp-test-micky ------ is used to run the built docker image and used
+                                                            the port mapping
