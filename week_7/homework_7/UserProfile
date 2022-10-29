@@ -1,0 +1,4 @@
+'name':str
+'age':int
+'country':str
+'rating':int

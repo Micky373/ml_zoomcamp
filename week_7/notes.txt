@@ -1,0 +1,3 @@
+bentoml serve service.py:svc --reload ----> building the bentoml model
+bentoml containerize credit_risk_classifier:hjxg34swtw7hegpy ----> Containerizing the bentoml model
+locust -H http://localhost:3000 ----> to start the locus after having the locustfile.py file
